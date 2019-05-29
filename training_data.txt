@@ -1,0 +1,1 @@
+input /mnt/c/Users/felix/Documents/MRDATA/Segmentation_test/Images/Training/Training_merged_144p.nii.gz WM /mnt/c/Users/felix/Documents/MRDATA/Segmentation_test/wm/Train/Training_merged_wm_144p.nii.gz GM /mnt/c/Users/felix/Documents/MRDATA/Segmentation_test/gm/Training/Training_merged_gm_144p.nii.gz
