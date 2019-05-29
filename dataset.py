@@ -105,7 +105,7 @@ class MRI2DSegDataset(Dataset):
             w, h = input_image.shape[0:2]
             new_w, new_h = self.matrix_size
             if w<new_w or h<new_h:
-                print w, h
+                print(w, h)
                 raise RuntimeError('Image smaller than required size : {}x{}, '\
                 'please provide images of equal or greater size.'.format(new_w, new_h))
             w1 = (w-new_w)/2
@@ -115,14 +115,16 @@ class MRI2DSegDataset(Dataset):
 
             # iterating over the z axis to get each 2D slice
             for i in range(input_image.shape[2]):
-                input_slice = input_image.get_data()[w1:w2,h1:h2,i,...].astype(self.data_type)
+                #input_slice = input_image.get_data()[w1:w2,h1:h2,i,...].astype(self.data_type)
+                input_slice = input_image.get_data()[int(w1):int(w2),int(h1):int(h2),i,...].astype(self.data_type)
                 if len(input_slice.shape)==2:
                     # if there is only one channel in input, add the channel dimension as first dimension
                     input_slice = np.reshape(input_slice, (1,)+input_slice.shape)
                 else:
                     # if there are multiple channel, move axis to have the channel dimension as first dimension
                     input_slice = np.moveaxis(input_slice, 2, 0)
-                gt_slices = [gt[w1:w2,h1:h2,i] for gt in gt_nps]
+                #gt_slices = [gt[w1:w2,h1:h2,i] for gt in gt_nps]
+                gt_slices = [gt[int(w1):int(w2),int(h1):int(h2),i] for gt in gt_nps]
 
                 # compute mean of all the input slices (on 1st channel only, for input normalization in network)
                 self.mean += np.mean(input_slice[0,:,:])/(input_image.shape[2]*len(self.filenames))
@@ -142,11 +144,11 @@ class MRI2DSegDataset(Dataset):
                 line = line.split()
                 if len(line)%2:
                     raise RuntimeError('Error in data paths text file parsing.')
-                for i in range(len(line)/2):
+                for i in range(int(len(line))//2):
                     try:
                         nib.load(line[2*i+1])
                     except Exception:
-                        print line[2*i+1]
+                        print(line[2*i+1])
                         raise RuntimeError("Invalid path in data paths textt file : {}".format(line[2*i+1]))
                     if(line[2*i]=="input"):
                         fnames[0]=line[2*i+1]
@@ -188,10 +190,10 @@ class MRI2DSegDataset(Dataset):
 
 
 def make_masks_exclusive(gts):
-    # make sure gt masks are not overlapping
-    indexes = range(len(gts))
-    np.random.shuffle(indexes)
-    for i in range(len(indexes)):
-        for j in range(i):
-            gts[indexes[i]][gts[indexes[j]]>=gts[indexes[i]]]=0
-    return gts
+	# make sure gt masks are not overlapping
+	indexes = range(len(gts))
+	np.random.shuffle(list(indexes))
+	for i in range(len(indexes)):
+		for j in range(i):
+			gts[indexes[i]][gts[indexes[j]]>=gts[indexes[i]]]=0
+	return gts

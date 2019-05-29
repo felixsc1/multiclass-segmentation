@@ -38,11 +38,11 @@ parameters = json.load(open(paths.parameters))
 
 device = torch.device("cuda:0" if (torch.cuda.is_available() and args.cuda) else "cpu")
 if (not torch.cuda.is_available() and args.cuda):
-    print "cuda is not available. "
+    print("cuda is not available. ")
 
-print "Working on {}.".format(device)
+print("Working on {}.".format(device))
 if torch.cuda.is_available():
-    print "using GPU number {}".format(gpu_id)
+    print("using GPU number {}".format(gpu_id))
 
 
 ## CREATE DATASETS ##
@@ -81,7 +81,6 @@ training_dataloader = DataLoader(training_dataset, batch_size=parameters["traini
                                  shuffle=True, drop_last=True, num_workers=1)
 validation_dataloader = DataLoader(validation_dataset, batch_size=parameters["training"]["batch_size"],
                                    shuffle=True, drop_last=False, num_workers=1)
-
 parameters["input"]["training_data"]=paths.training_data
 parameters["input"]["validation_data"]=paths.validation_data
 
@@ -250,4 +249,4 @@ writer.close()
 os.system("cp "+paths.parameters+" "+log_dir+"/parameters.json")
 torch.save(net, "./"+log_dir+"/final_model.pt")
 
-print "Training complete, model saved at ./"+log_dir+"/final_model.pt"
+print("Training complete, model saved at ./"+log_dir+"/final_model.pt")
