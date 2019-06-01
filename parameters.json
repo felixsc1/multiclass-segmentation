@@ -12,17 +12,17 @@
 	},
 	"training":
 	{
-		"learning_rate": 0.001,
+		"learning_rate": 0.0008,
 		"optimizer": "adam",
 		"loss_function": "dice",
-		"batch_size": 1,
-		"nb_epochs": 10000,
+		"batch_size": 2,
+		"nb_epochs": 1000,
 		"lr_schedule": "constant"
 	},
 	"net":
 	{
-		"model":"smallunet",
-		"drop_rate":0.3,
+		"model":"nopoolaspp",
+		"drop_rate":0.5,
 		"bn_momentum": 0.1 
 	},
 	"input":
