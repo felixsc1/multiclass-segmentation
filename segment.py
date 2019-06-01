@@ -43,10 +43,10 @@ def segment(network_path, input_path, output_path, tag=""):
     # matrix size
     w, h = image.shape[0:2]
     new_w, new_h = network.matrix_size
-    w1 = (w-new_w)/2
-    w2 = new_w+w1
-    h1 = (h-new_h)/2
-    h2 = new_h+h1
+    w1 = int((w-new_w)/2)
+    w2 = int(new_w+w1)
+    h1 = int((h-new_h)/2)
+    h2 = int(new_h+h1)
     input = np.moveaxis(image.get_data(), 2, 0) # use z dim as batchsize
     input = input[:,w1:w2,h1:h2] # crop images
     if len(input.shape)==3:
@@ -86,7 +86,7 @@ def segment(network_path, input_path, output_path, tag=""):
         image_seg = Nifti1Image(predictions_uncropped==i+1, None, image.header.copy())
         file_name = output_path_head+tag+"_"+class_names[i]+"_seg"+output_path_tail
         nib.save(image_seg, file_name)
-        print "Segmentation of {} saved at {}".format(class_names[i], file_name)
+        print("Segmentation of {} saved at {}".format(class_names[i], file_name))
 
 
 if args.output:
